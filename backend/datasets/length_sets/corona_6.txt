@@ -6,3 +6,5 @@ persco
 pfizer
 jansen
 crisis
+tinder
+vaccin
