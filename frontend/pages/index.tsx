@@ -102,7 +102,9 @@ const Application: NextPage = () => {
   /** handle all key presses */
   useEffect(() => {
     async function fetchResponse() {
-      const response = await fetch('http://localhost:4000')
+      const response = await fetch('http://localhost:4000/start?length=5&category=standard', {
+        mode: 'no-cors'
+      })
       console.log(response)
     }
     fetchResponse()
