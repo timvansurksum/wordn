@@ -2,6 +2,7 @@ from typing import Optional
 
 from fastapi import FastAPI
 from game import Game
+from validator import Validator
 
 app = FastAPI()
 
@@ -15,5 +16,5 @@ def start(length: int, category: str):
 
 
 @app.post("/validate_word")
-def read_item(word: str, token: str):
-    return {"k0": "Status", "u1": "Status", "t2": "Status"}
+def validateWord(word: str, token: str):
+    return Validator().validateWord(token, word)    
