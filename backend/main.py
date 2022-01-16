@@ -9,6 +9,10 @@ app = FastAPI()
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
+    
+@app.get("/musk")
+def read_root(net_worth):
+    return f"elon musk is worth: {str(net_worth)}"
 
 @app.get("/start")
 def start(length: int, category: str):
