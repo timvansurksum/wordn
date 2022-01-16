@@ -23,7 +23,8 @@ class Dataset:
             words_length_file = open(f"{folder_path}/length_sets/{category}_{word_length_key}.txt", 'w')
             words = ''
             for word in word_length_dictionairy[word_length_key]:
-                words_length_file.write(f'{word}\n')
+                if not (word.find(' ')+1):
+                    words_length_file.write(f'{word}\n')
 
     def getRandomWord(self, requested_category = "standard", length = 5):
         if (length > 3) and length < 9:
@@ -44,3 +45,6 @@ class Dataset:
             if category.endswith('.txt'):
                 clean_categories.append(category)
         return clean_categories
+
+dataset = Dataset()
+dataset.split_dataset('verwarrend')
