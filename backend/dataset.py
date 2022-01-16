@@ -3,7 +3,6 @@ import os
 import random
 
 
-
 class Dataset:
 
     def split_dataset(self, category):
@@ -26,8 +25,6 @@ class Dataset:
             words = ''
             for word in word_length_dictionairy[word_length_key]:
                 words_length_file.write(f'{word}\n')
-
-
 
     def getRandomWord(self, requested_category = "standard", length = 5):
         if (length > 3) and length < 9:
