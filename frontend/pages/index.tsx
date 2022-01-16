@@ -116,6 +116,7 @@ const Application: NextPage = () => {
     const newOldWords = [...oldWords, newWord]
     const wordCorrect = Object.entries(validations).every(([key, value]) => translateServerStateToFrontendState(value) == LetterState.Correct)
     setOldWords(newOldWords)
+    setIncorrectWord(false)
     if (wordCorrect) {
       setWord([])
     } else {
