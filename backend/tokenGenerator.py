@@ -11,7 +11,10 @@ class Token:
         return jwt.encode(payload, self.getSecret(), algorithm="HS256")
 
     def decodeToken(self, token):
-        return jwt.decode(token, self.getSecret(), algorithms="HS256")
+        try:
+            return jwt.decode(token, self.getSecret(), algorithms="HS256")
+        except:
+            return {}
     
     def saveWordInTokenAndGetToken(self, word):
         return self.getToken({"word":word})
