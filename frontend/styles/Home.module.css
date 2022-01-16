@@ -92,3 +92,19 @@
 .letter-block--filled {
     background-color: var(--blue) !important;
 }
+
+.focus-button {
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+}
+
+.focus-input {
+    display: inline-block;
+    position: absolute;
+    transform: translate(-100%, -100%);
+}
