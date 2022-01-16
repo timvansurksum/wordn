@@ -30,7 +30,7 @@ class Dataset:
             categories = os.listdir('datasets')
             for category in categories:
                 if (category.find(requested_category) + 1):
-                    path = os.path.abspath(f"datasets/{requested_category}_{length}.txt")
+                    path = os.path.abspath(f"datasets/length_sets/{requested_category}_{length}.txt")
                     data = open(path, 'r')
                     data = data.read().split('\n')
                     return random.choice(data).lower()
