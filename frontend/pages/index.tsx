@@ -21,7 +21,7 @@ const URL = 'http://localhost:4000'
 
 function LetterBlock({ letter }: { letter: Letter }): JSX.Element {
   return (
-    <div className={styles['letter-block']}>
+    <div className={`${styles['letter-block']} ${styles[`letter-block--${letter.state}`]}`}>
       <div className={styles['letter']}>
         {letter.char}
       </div>
@@ -30,8 +30,8 @@ function LetterBlock({ letter }: { letter: Letter }): JSX.Element {
   )
 }
 
-function WordRow({ word }: { word: Letter[] }): JSX.Element {
-  return <div className={styles['word-row']}>
+function WordRow({ word, incorrectWord }: { word: Letter[], incorrectWord: boolean }): JSX.Element {
+  return <div className={styles['word-row']} data-incorrect={incorrectWord}>
     {
       word.map((letter, index) => {
         return <LetterBlock key={index} letter={letter} />
@@ -42,6 +42,7 @@ function WordRow({ word }: { word: Letter[] }): JSX.Element {
 
 const Application: NextPage = () => {
   /** variables */
+  const [incorrectWord, setIncorrectWord] = useState<boolean>(false);
   const [token, setToken] = useState<string>('');
   const [validations, setValidation] = useState([]);
   const [tries, setTries] = useState(0);
@@ -95,7 +96,15 @@ const Application: NextPage = () => {
 
   /** check validations */
   useEffect(() => {
-    if (validations.length == 0) return
+    console.log('etest')
+    // console.log(Object.entries(validations))
+    // console.log(Object.entries(validations).length)
+    if (Object.entries(validations).length == 0) {
+      if (word[0].state == LetterState.Empty) return
+      setWord(getEmptyWord())
+      setIncorrectWord(true)
+      return
+    }
 
     const newWord: Letter[] = []
     Object.entries(validations).forEach(([key, value], _) => {
@@ -113,6 +122,14 @@ const Application: NextPage = () => {
       /** new try */
       setWord(getEmptyWord())
     }
+
+    setTimeout(() => {
+      // window.scrollTo(0, document.body.scrollHeight);
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth'
+      });
+    }, 200)
   }, [validations])
 
 
@@ -141,11 +158,11 @@ const Application: NextPage = () => {
     }
 
     async function validateWord() {
-      // const chars = word.map((letter) => letter.char).join('')
-      // const charWithDot = word.map((letter) => letter.char).map(char => `${char}. `).join('')
-      // let utterance = new SpeechSynthesisUtterance(`${chars}! ${charWithDot}`);
-      // utterance.voice = speechSynthesis.getVoices()[1]
-      // speechSynthesis.speak(utterance);
+      const chars = word.map((letter) => letter.char).join('')
+      const charWithDot = word.map((letter) => letter.char).map(char => `${char}. `).join('')
+      let utterance = new SpeechSynthesisUtterance(`${chars}! ${charWithDot}`);
+      // utterance.voice = speechSynthesis.getVoices()[2]
+      speechSynthesis.speak(utterance);
       const emptyLetter = word.find(letter => letter.state == LetterState.Empty)
       /** cannot send word  */
       if (emptyLetter) {
@@ -205,16 +222,16 @@ const Application: NextPage = () => {
 
   return (
     <div className={styles['container']}>
-      <header>
+      <header className={styles['header']}>
         <h1 className={styles['title']}>Wordn</h1>
       </header>
-      <main>
+      <main className={styles['word-rows']}>
         {
           oldWords.map((oldWord, index) => {
-            return <WordRow word={oldWord} key={index} />
+            return <WordRow word={oldWord} incorrectWord={false} key={index} />
           })
         }
-        <WordRow word={word} />
+        <WordRow word={word} incorrectWord={incorrectWord} />
       </main>
     </div>
   )
