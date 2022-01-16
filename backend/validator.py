@@ -1,11 +1,15 @@
 
 from enum import Enum
 from tokenGenerator import Token
+from dataset import Dataset
 
 
 class Validator:
 
     def validateWord(self, token, word):
+        if not Dataset().checkWord(word):
+            return {}
+            
         wordToGuess = Token().getWordFromToken(token)
         validatedDict = {}
         characters = {}
