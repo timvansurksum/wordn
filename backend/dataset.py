@@ -15,13 +15,14 @@ class Dataset:
         word_length_dictionairy = {}
         for word in words:
             word_length = len(word)
-            if word_length in word_length_dictionairy.keys():
-                word_length_dictionairy[word_length].append(word)
-            else:
-                word_length_dictionairy[len(word)] = []
+            if word_length < 9 and word_length > 3:
+                if word_length in word_length_dictionairy.keys():
+                    word_length_dictionairy[word_length].append(word)
+                else:
+                    word_length_dictionairy[len(word)] = []
         for word_length_key in word_length_dictionairy.keys():
             folder_path = os.path.abspath("datasets")
-            words_length_file = open(f"{folder_path}/{category}_{word_length_key}.txt", 'w')
+            words_length_file = open(f"{folder_path}/length_sets/{category}_{word_length_key}.txt", 'w')
             words = ''
             for word in word_length_dictionairy[word_length_key]:
                 words_length_file.write(f'{word}\n')
@@ -41,4 +42,13 @@ class Dataset:
             return 'error wrong word length'
     
     def getCategories(self):
-        return []
+        categories = os.listdir('datasets')
+        clean_categories = []
+        for category in categories:
+            if category.endswith('.txt'):
+                clean_categories.append(category)
+        return clean_categories
+
+dataset = Dataset()
+dataset.split_dataset(category = 'standard')
+print(dataset.getCategories())
