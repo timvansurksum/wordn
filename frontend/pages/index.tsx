@@ -45,6 +45,7 @@ const Application: NextPage = () => {
   const [token, setToken] = useState<string>('');
   const [validations, setValidation] = useState([]);
   const [tries, setTries] = useState(0);
+  const [oldWords, setOldWords] = useState<Array<Letter[]>>([]);
   const [word, setWord] = useState<Letter[]>([
     getEmptyLetter()
   ]);
@@ -54,6 +55,16 @@ const Application: NextPage = () => {
       char: '',
       state: LetterState.Empty
     }
+  }
+
+  function getEmptyWord(): Letter[] {
+    return [
+      getEmptyLetter(),
+      getEmptyLetter(),
+      getEmptyLetter(),
+      getEmptyLetter(),
+      getEmptyLetter(),
+    ]
   }
 
   /** set token */
@@ -66,13 +77,7 @@ const Application: NextPage = () => {
     })
 
     /** set standard word length */
-    setWord([
-      getEmptyLetter(),
-      getEmptyLetter(),
-      getEmptyLetter(),
-      getEmptyLetter(),
-      getEmptyLetter(),
-    ])
+    setWord(getEmptyWord())
   }, [])
 
   function translateServerStateToFrontendState(serverState: string): LetterState {
@@ -90,9 +95,8 @@ const Application: NextPage = () => {
 
   /** check validations */
   useEffect(() => {
-    console.log('validations veranderd')
-    console.log(validations)
     if (validations.length == 0) return
+
     const newWord: Letter[] = []
     Object.entries(validations).forEach(([key, value], _) => {
       newWord.push({
@@ -100,7 +104,15 @@ const Application: NextPage = () => {
         state: translateServerStateToFrontendState(value),
       })
     })
-    setWord(newWord)
+    const newOldWords = [...oldWords, newWord]
+    const wordCorrect = Object.entries(validations).every(([key, value]) => translateServerStateToFrontendState(value) == LetterState.Correct)
+    setOldWords(newOldWords)
+    if (wordCorrect) {
+      setWord([])
+    } else {
+      /** new try */
+      setWord(getEmptyWord())
+    }
   }, [validations])
 
 
@@ -118,10 +130,10 @@ const Application: NextPage = () => {
         return
       }
 
-      let wordCopy = [...word]
-      wordCopy[emptyLetterIndex].char = key
-      wordCopy[emptyLetterIndex].state = LetterState.Filled
-      setWord(wordCopy);
+      let wordToAdjust = [...word]
+      wordToAdjust[emptyLetterIndex].char = key
+      wordToAdjust[emptyLetterIndex].state = LetterState.Filled
+      setWord(wordToAdjust);
     }
 
     function getStringFromWord() {
@@ -157,7 +169,22 @@ const Application: NextPage = () => {
       }
     }
 
+    function removeLastLetter() {
+      /** find the first filled letter at the end */
+      let wordToReverse = [...word]
+      const filledLetterReverseIndex = wordToReverse.reverse().findIndex(letter => letter.state == LetterState.Filled)
+      if (filledLetterReverseIndex == -1) return
+      const firstFilledLetterIndex = (word.length - 1) - filledLetterReverseIndex
+      let wordToAdjust = [...word]
+      wordToAdjust[firstFilledLetterIndex].char = ''
+      wordToAdjust[firstFilledLetterIndex].state = LetterState.Empty
+      setWord(wordToAdjust)
+    }
+
     function handleKeyPress(key: string) {
+      if (key == 'Backspace') {
+        removeLastLetter()
+      }
       /** submit word */
       if (key == 'Enter') {
         validateWord()
@@ -170,9 +197,9 @@ const Application: NextPage = () => {
 
     /** set key events */
     const handleEvent = ({ key }: { key: string }) => handleKeyPress(key)
-    window.addEventListener('keypress', handleEvent);
+    window.addEventListener('keydown', handleEvent);
     return () => {
-      window.removeEventListener('keypress', handleEvent)
+      window.removeEventListener('keydown', handleEvent)
     }
   }, [token, word]);
 
@@ -182,6 +209,11 @@ const Application: NextPage = () => {
         <h1 className={styles['title']}>Wordn</h1>
       </header>
       <main>
+        {
+          oldWords.map((oldWord, index) => {
+            return <WordRow word={oldWord} key={index} />
+          })
+        }
         <WordRow word={word} />
       </main>
     </div>
