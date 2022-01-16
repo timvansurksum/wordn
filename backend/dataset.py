@@ -63,7 +63,6 @@ class Dataset:
                     
 
 
-# dataset = Dataset()
-# word = 'verf'
-# print(word, dataset.getCategories())
-# print(word, dataset.checkword(word))
+dataset = Dataset()
+word = 'lol'
+print(word, dataset.split_dataset('corona'))
