@@ -36,7 +36,7 @@ def start(length: int, category: Optional[str] = "standard"):
 
 
 @app.post("/validate_word")
-def validateWord(validateBody: ValidateBody):
+def validate_word(validateBody: ValidateBody):
     token = validateBody.token
     word = validateBody.word
     renewedToken = Token().renewToken(token)

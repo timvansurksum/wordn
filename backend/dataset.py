@@ -43,8 +43,27 @@ class Dataset:
         clean_categories = []
         for category in categories:
             if category.endswith('.txt'):
-                clean_categories.append(category)
+                clean_categories.append(category.split('.')[0])
         return clean_categories
 
-dataset = Dataset()
-dataset.split_dataset('verwarrend')
+    def checkword(self, word:str):
+        word_length = len(word)
+        if word_length > 3 and word_length < 9:
+            categories = self.getCategories()
+            
+            for category in categories:
+                path = os.path.abspath(f"datasets/length_sets/{category}_{word_length}.txt")
+                data = open(path, 'r')
+                data = data.read().split('\n')
+                for word_check in data:
+                    if word_check.lower() == word.lower():
+                        return True
+            return False
+        return 'error please use a shorter word'
+                    
+
+
+# dataset = Dataset()
+# word = 'verf'
+# print(word, dataset.getCategories())
+# print(word, dataset.checkword(word))
