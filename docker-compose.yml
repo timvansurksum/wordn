@@ -2,11 +2,13 @@ version: "3.9"
 services:
 
   frontend:
+    image: europe-west4-docker.pkg.dev/wordn-338419/images/wordn.frontend:latest
     build: frontend
     ports:
       - 3000:3000
 
   backend:
+    image: europe-west4-docker.pkg.dev/wordn-338419/images/wordn.backend:latest
     build: backend
     ports:
       - 4000:4000

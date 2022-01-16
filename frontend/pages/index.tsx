@@ -17,7 +17,11 @@ type Letter = {
   state: LetterState
 }
 
-const URL = 'http://localhost:4000'
+// const URL = 'http://localhost:4000'
+const env = process.env.NODE_ENV
+const URL = (env == "development")
+  ? 'http://localhost:4000'
+  : 'https://backend.wordn.nl'
 
 function LetterBlock({ letter }: { letter: Letter }): JSX.Element {
   return (
