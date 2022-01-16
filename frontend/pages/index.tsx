@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import { useCallback, useEffect, useState } from 'react';
+import { createRef, useCallback, useEffect, useRef, useState } from 'react';
 import styles from '../styles/Home.module.css';
 import axios from 'axios';
 import { findSourceMap } from 'module';
@@ -228,6 +228,7 @@ const Application: NextPage = () => {
 
   return (
     <div className={styles['container']}>
+      <input type="text" ref={input => input && input.focus()} />
       <header className={styles['header']}>
         <h1 className={styles['title']}>Wordn</h1>
       </header>
