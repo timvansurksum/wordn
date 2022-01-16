@@ -96,7 +96,6 @@ const Application: NextPage = () => {
   /** check validations */
   useEffect(() => {
     if (validations.length == 0) return
-    if (Object.entries(validations).every(([key, value]) => translateServerStateToFrontendState(value) == LetterState.Correct)) return
 
     const newWord: Letter[] = []
     Object.entries(validations).forEach(([key, value], _) => {
@@ -106,8 +105,14 @@ const Application: NextPage = () => {
       })
     })
     const newOldWords = [...oldWords, newWord]
+    const wordCorrect = Object.entries(validations).every(([key, value]) => translateServerStateToFrontendState(value) == LetterState.Correct)
     setOldWords(newOldWords)
-    setWord(getEmptyWord())
+    if (wordCorrect) {
+      setWord([])
+    } else {
+      /** new try */
+      setWord(getEmptyWord())
+    }
   }, [validations])
 
 
