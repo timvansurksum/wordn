@@ -1,4 +1,3 @@
-import codecs
 import os
 import random
 
@@ -45,7 +44,3 @@ class Dataset:
             if category.endswith('.txt'):
                 clean_categories.append(category)
         return clean_categories
-
-dataset = Dataset()
-dataset.split_dataset(category = 'standard')
-print(dataset.getCategories())
