@@ -43,13 +43,6 @@ function WordRow({ word }: { word: Letter[] }): JSX.Element {
 
 const Application: NextPage = () => {
   const alphabet = new Set(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'r', 'z'])
-  // const [word, setWord] = useState<Letter[]>([
-  //   getEmptyLetter(),
-  //   getEmptyLetter(),
-  //   getEmptyLetter(),
-  //   getEmptyLetter(),
-  //   getEmptyLetter(),
-  // ]);
 
   const [word, setWord] = useState<Letter[]>([
     { ...getEmptyLetter(), ...{ char: 'a', state: LetterState.Correct } },
@@ -108,6 +101,12 @@ const Application: NextPage = () => {
 
   /** handle all key presses */
   useEffect(() => {
+    async function fetchResponse() {
+      const response = await fetch('http://localhost:4000')
+      console.log(response)
+    }
+    fetchResponse()
+
     const handleEvent = ({ key }: { key: string }) => handleKeyPress(key)
     const eventListener = window.addEventListener('keypress', handleEvent);
     return () => {
