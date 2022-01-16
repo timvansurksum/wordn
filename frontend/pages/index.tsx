@@ -136,7 +136,7 @@ const Application: NextPage = () => {
 
   /** handle all key presses */
   useEffect(() => {
-    const alphabet = new Set(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'r', 'z'])
+    const alphabet = new Set(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'r', 'z'])
 
     function fillEmptyLetter(key: string) {
       const emptyLetterIndex = word.findIndex((letter) => {
@@ -159,11 +159,6 @@ const Application: NextPage = () => {
     }
 
     async function validateWord() {
-      const chars = word.map((letter) => letter.char).join('')
-      const charWithDot = word.map((letter) => letter.char).map(char => `${char}. `).join('')
-      let utterance = new SpeechSynthesisUtterance(`${chars}! ${charWithDot}`);
-      // utterance.voice = speechSynthesis.getVoices()[2]
-      speechSynthesis.speak(utterance);
       const emptyLetter = word.find(letter => letter.state == LetterState.Empty)
       /** cannot send word  */
       if (emptyLetter) {
@@ -173,6 +168,12 @@ const Application: NextPage = () => {
       /** can send word */
       else {
         try {
+          /** say word */
+          const chars = word.map((letter) => letter.char).join('')
+          const charWithDot = word.map((letter) => letter.char).map(char => `${char}. `).join('')
+          let utterance = new SpeechSynthesisUtterance(`${chars}! ${charWithDot}`);
+          speechSynthesis.speak(utterance);
+
           const data = {
             token: token,
             word: getStringFromWord()
