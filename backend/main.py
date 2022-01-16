@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from game import Game
 from validator import Validator
+from tokenGenerator import Token
 
 app = FastAPI()
 
@@ -29,4 +30,5 @@ def start(length: int, category: Optional[str] = "standard"):
 
 @app.post("/validate_word")
 def validateWord(word: str, token: str):
-    return Validator().validateWord(token, word)
+    renewedToken = Token().renewToken(token)
+    return {"validation": Validator().validateWord(token, word), "token": renewedToken, "tries": Token().getTries(renewedToken)}
