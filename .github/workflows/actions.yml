@@ -38,7 +38,10 @@ jobs:
         run: touch .env && echo SECRET=${{ secrets.JWT_SECRET }} >> .env
 
       # build & deploy
-      - run: bash deploy.sh
+      - run: docker-compose -f docker-compose.yml -f docker-compose-production.yml build
+      - run: docker-compose -f docker-compose.yml -f docker-compose-production.yml push
+      - run: gcloud run deploy wordn-frontend --project=wordn-338419 --port=3000 --max-instances=25 --allow-unauthenticated --region=europe-west4 --image=europe-west4-docker.pkg.dev/wordn-338419/images/wordn.frontend:latest
+      - run: gcloud run deploy wordn-backend --project=wordn-338419 --port=4000 --max-instances=25 --allow-unauthenticated --region=europe-west4 --image=europe-west4-docker.pkg.dev/wordn-338419/images/wordn.backend:latest
 
       # notify in slack
       - name: Slack Notify

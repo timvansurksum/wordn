@@ -1,0 +1,5 @@
+# overwrites of default docker-compose file file
+services:
+  frontend:
+    build:
+      dockerfile: Dockerfile.production
