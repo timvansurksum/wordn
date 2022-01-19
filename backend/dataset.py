@@ -68,6 +68,6 @@ class Dataset:
 
 
 dataset = Dataset()
-dataset.split_dataset("standard")
+dataset.split_dataset("wordlist-ascii")
 # word = 'verft'
 # print(word, dataset.checkWord(word))
