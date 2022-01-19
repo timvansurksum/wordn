@@ -1,6 +1,7 @@
 import os
 import random
 import string
+import pickle
 
 
 class Dataset:
@@ -61,13 +62,42 @@ class Dataset:
                 data = open(path, "r")
                 data = data.read().split("\n")
                 for word_check in data:
-                    if word_check.lower().startswith(word.lower()):
+                    if word_check.lower() == word.lower():
                         return True
             return False
         return False
 
+    def generatedictionary(self):
+        unique_word_dict_by_length = {}
+        categories = self.getCategories()
+
+        for category in categories:
+            path = os.path.abspath(f"datasets/{category}.txt")
+            data = open(path, "r")
+            data = data.read().split("\n")
+            for word in data:
+                word_length = len(word)
+                word = word.lower()
+
+                if word_length in unique_word_dict_by_length:
+                    unique_word_dict_by_length[word_length][word] = True
+                else:
+                    unique_word_dict_by_length[word_length] = {word: True}
+
+        with open("dictionairy-dump.pickle", "wb") as handle:
+            pickle.dump(
+                unique_word_dict_by_length, handle, protocol=pickle.HIGHEST_PROTOCOL
+            )
+
+    def read_dictionairy():
+        try:
+            with open("dictionairy-dump.pickle", "rb") as handle:
+                return pickle.load(handle)
+        except:
+            return {}
+
 
 dataset = Dataset()
-dataset.split_dataset("wordlist-ascii")
+dataset.generatedictionary()
 # word = 'verft'
 # print(word, dataset.checkWord(word))
