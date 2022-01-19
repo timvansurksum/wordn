@@ -65,6 +65,6 @@ class Dataset:
                     
 
 
-# dataset = Dataset()
-# word = 'verft'
-# print(word, dataset.checkWord(word))
+dataset = Dataset()
+word = 'verft'
+print(word, dataset.checkWord(word))
