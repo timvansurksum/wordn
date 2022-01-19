@@ -33,12 +33,12 @@ jobs:
       - run: 'gcloud auth configure-docker europe-west4-docker.pkg.dev -q'
 
       # create env file for deployment
-      - name: Make envfile
-        uses: SpicyPizza/create-envfile@v1
-        with:
-          envkey_SECRET: ${{ secrets.JWT_SECRET }}
-          directory: backend
-          file_name: .env
+      - name: create envfile
+        working-directory: ./backend
+        run: |
+          touch .env
+          echo SECRET=${{ secrets.JWT_SECRET }} >> .env
+          EOF
 
       # build & deploy
       - run: bash deploy.sh
