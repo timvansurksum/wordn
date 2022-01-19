@@ -67,7 +67,7 @@ class Dataset:
         return False
 
 
-dataset = Dataset()
-dataset.split_dataset("wordlist-ascii")
+# dataset = Dataset()
+# dataset.split_dataset("wordlist-ascii")
 # word = 'verft'
 # print(word, dataset.checkWord(word))
