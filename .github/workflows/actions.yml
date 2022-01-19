@@ -35,10 +35,7 @@ jobs:
       # create env file for deployment
       - name: create envfile
         working-directory: ./backend
-        run: |
-          touch .env
-          echo SECRET=${{ secrets.JWT_SECRET }} >> .env
-          EOF
+        run: touch .env && echo SECRET=${{ secrets.JWT_SECRET }} >> .env
 
       # build & deploy
       - run: bash deploy.sh
