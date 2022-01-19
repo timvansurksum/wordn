@@ -39,3 +39,7 @@ jobs:
 
       # build & deploy
       - run: bash deploy.sh
+
+      # notify in slack
+      - name: Slack Notify
+        uses: rtCamp/action-slack-notify@v2.2.0
