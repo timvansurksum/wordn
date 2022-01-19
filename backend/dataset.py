@@ -54,11 +54,11 @@ class Dataset:
 
             for category in categories:
                 path = os.path.abspath(
-                    f"datasets/length_sets/{category}_{word_length}.txt")
+                    f"datasets/{category}.txt")
                 data = open(path, 'r')
                 data = data.read().split('\n')
                 for word_check in data:
-                    if word_check.lower() == word.lower():
+                    if word_check.lower().startswith(word.lower()):
                         return True
             return False
         return False
@@ -66,5 +66,5 @@ class Dataset:
 
 
 # dataset = Dataset()
-# word = 'lol'
-# print(word, dataset.split_dataset('corona'))
+# word = 'verft'
+# print(word, dataset.checkWord(word))
