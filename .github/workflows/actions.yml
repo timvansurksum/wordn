@@ -21,11 +21,13 @@ jobs:
       # setup docker compose 
       - run: pip3 install docker-compose --upgrade
 
-      # setup google cloud cli
+      # authenticate with secret
       - id: 'auth'
         uses: 'google-github-actions/auth@v0'
         with:
           credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      # setup cloud sdk
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v0'
       - run: 'gcloud auth configure-docker europe-west4-docker.pkg.dev -q'
