@@ -3,9 +3,12 @@ services:
 
   frontend:
     image: europe-west4-docker.pkg.dev/wordn-338419/images/wordn.frontend:latest
-    build: frontend
+    build:
+      context: frontend
     ports:
       - 3000:3000
+    env_file:
+      - .env
 
   backend:
     image: europe-west4-docker.pkg.dev/wordn-338419/images/wordn.backend:latest
