@@ -16,15 +16,16 @@ class Dataset:
                 if word_length in word_length_dictionairy.keys():
                     word_length_dictionairy[word_length].append(word)
                 else:
-                    word_length_dictionairy[len(word)] = []
-        for word_length_key in word_length_dictionairy.keys():
-            folder_path = os.path.abspath("datasets")
-            words_length_file = open(
-                f"{folder_path}/length_sets/{category}_{word_length_key}.txt", 'w')
-            words = ''
-            for word in word_length_dictionairy[word_length_key]:
-                if not (word.find(' ')+1):
-                    words_length_file.write(f'{word}\n')
+                    word_length_dictionairy[word_length] = [word]
+
+        folder_path = os.path.abspath("datasets")
+        for word_length, word_list in word_length_dictionairy.items():
+            words_length_file = open(f"{folder_path}/length_sets/{category}_{word_length}.txt", 'w')
+            
+            line_seperated_word_list = '\n'.join(word_list)
+            
+            words_length_file.write(line_seperated_word_list)
+            words_length_file.close()
 
     def getRandomWord(self, requested_category="standard", length=5):
         if (length > 3) and length < 9:
@@ -62,9 +63,8 @@ class Dataset:
                         return True
             return False
         return False
-                    
 
 
-dataset = Dataset()
-word = 'verft'
-print(word, dataset.checkWord(word))
+# dataset = Dataset()
+# word = 'verft'
+# print(word, dataset.checkWord(word))
