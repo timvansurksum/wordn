@@ -3,6 +3,11 @@ import { createRef, SetStateAction, useCallback, useEffect, useRef, useState } f
 import styles from '../styles/Home.module.css';
 import axios from 'axios';
 import { findSourceMap } from 'module';
+import useWindowSize from 'react-use/lib/useWindowSize'
+import Confetti from 'react-confetti'
+import useSound from 'use-sound';
+// @ts-ignore
+// import victorySound from '../sounds/victory.mp3';
 
 enum LetterState {
   Empty = 'empty',
@@ -61,6 +66,8 @@ const Application: NextPage = () => {
   const [tries, setTries] = useState(0);
   const [oldWords, setOldWords] = useState<Array<Letter[]>>([]);
   const [word, setWord] = useState<Letter[]>([]);
+  const { width, height } = useWindowSize()
+  const [play] = useSound('victory.mp3');
 
   const emptyWordRows = (4 - oldWords.length > 0) ? 4 - oldWords.length : 0;
 
@@ -78,6 +85,17 @@ const Application: NextPage = () => {
   useEffect(() => {
     startNewGame(setToken, setWord);
   }, [])
+
+  /**
+   * WHEN GAME IS DONE
+   */
+  useEffect(() => {
+    if (finished) {
+      setTimeout(() => {
+        play()
+      }, 1100)
+    }
+  }, [finished, play])
 
   /** 
    * UPDATE TO VALIDATIONS
@@ -230,6 +248,16 @@ const Application: NextPage = () => {
 
   return (
     <div className={styles['container']}>
+      {
+        // render client side only
+        process.browser &&
+        <Confetti
+          style={{ opacity: finished ? 1 : 0 }}
+          width={width}
+          height={height}
+          run={finished}
+        />
+      }
       <input type="text" ref={textInput} className={styles['focus-input']} />
       <button className={styles['focus-button']} onClick={focusTextInput}>test</button>
       <header className={styles['header']}>
