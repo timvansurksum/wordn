@@ -45,10 +45,15 @@ function WordRow({ word, incorrectWord }: { word: Letter[], incorrectWord: boole
   </div>
 }
 
+function EmptyWordRow(): JSX.Element {
+  const word = getEmptyWord();
+  return <WordRow word={word} incorrectWord={false} />
+}
+
 const Application: NextPage = () => {
   /**
-   * APPLICATION STATE
-   */
+    * APPLICATION STATE
+    */
   const [incorrectWord, setIncorrectWord] = useState<boolean>(false);
   const [finished, setFinished] = useState<boolean>(false);
   const [token, setToken] = useState<string>('');
@@ -56,6 +61,8 @@ const Application: NextPage = () => {
   const [tries, setTries] = useState(0);
   const [oldWords, setOldWords] = useState<Array<Letter[]>>([]);
   const [word, setWord] = useState<Letter[]>([]);
+
+  const emptyWordRows = (4 - oldWords.length > 0) ? 4 - oldWords.length : 0;
 
   function resetGame() {
     setIncorrectWord(false)
@@ -235,6 +242,11 @@ const Application: NextPage = () => {
           })
         }
         <WordRow word={word} incorrectWord={incorrectWord} />
+        {
+          [...Array(emptyWordRows)].map((_, index) => {
+            return <EmptyWordRow key={index} />;
+          })
+        }
       </main>
     </div>
   )
